@@ -1,0 +1,61 @@
+{
+  "check_interval_minutes": 5,
+  "action_mode": "reply",
+  "mark_as_read_after_reply": false,
+  "apply_gmail_label": true,
+  "gmail_label_name": "Recruiter-Replied",
+  "credentials_file": "credentials.json",
+  "state_file": "processed_emails.json",
+  "log_file": "agent.log",
+  "accounts": [
+    {
+      "id": "account_1",
+      "name": "Account 1 (Primary: swaroop.amls1@gmail.com)",
+      "token_file": "token_account1.json"
+    },
+    {
+      "id": "account_2",
+      "name": "Account 2 (krishna.java769@gmail.com)",
+      "token_file": "token_account2.json"
+    }
+  ],
+  "candidate": {
+    "name": "Krishna Jyothi Swaroopp",
+    "role": "Senior Java Full Stack Developer",
+    "phone": "",
+    "linkedin_url": "",
+    "portfolio_url": "",
+    "custom_message": "Thank you for reaching out regarding the opportunity. I am currently evaluating my next career move as a Senior Java Full Stack Developer. Please let me know the best time to schedule an initial discussion or share more details (job description, compensation range, and work arrangement) about the role."
+  },
+  "search": {
+    "query": "is:unread -from:linkedin -from:linkedin.com -from:dice.com -from:ziprecruiter.com -from:indeed.com -from:monster.com (recruiter OR \"talent acquisition\" OR hiring OR \"job opportunity\" OR interview OR \"career opportunity\" OR \"role at\" OR \"engineering role\")",
+    "ignore_senders": [
+      "linkedin",
+      "linkedin.com",
+      "via linkedin",
+      "dice",
+      "dice.com",
+      "ziprecruiter",
+      "ziprecruiter.com",
+      "zip recruiter",
+      "indeed",
+      "indeed.com",
+      "indeedmail.com",
+      "indeedapply.com",
+      "monster",
+      "monster.com",
+      "no-reply",
+      "noreply",
+      "donotreply",
+      "jobalerts-noreply@linkedin.com",
+      "invitations@linkedin.com",
+      "messages-noreply@linkedin.com",
+      "newsletters",
+      "notification",
+      "updates@",
+      "mailer-daemon"
+    ],
+    "subject_must_contain_any": [],
+    "body_must_contain_any": []
+  }
+}

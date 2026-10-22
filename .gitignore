@@ -1,0 +1,20 @@
+# OAuth tokens and secrets (DO NOT COMMIT)
+credentials.json
+token*.json
+token*
+client_secret*.json
+*.bak
+
+# Runtime state and logs
+agent.log
+processed_emails.json
+*.tmp
+
+# Python artifacts & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+.DS_Store
