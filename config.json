@@ -28,7 +28,8 @@
     "custom_message": "Thank you for reaching out regarding the opportunity. I am currently evaluating my next career move as a Senior Java Full Stack Developer. Please let me know the best time to schedule an initial discussion or share more details (job description, compensation range, and work arrangement) about the role."
   },
   "search": {
-    "query": "is:unread -from:linkedin -from:linkedin.com -from:dice.com -from:ziprecruiter.com -from:indeed.com -from:monster.com -from:greatrecruiters.com (recruiter OR \"talent acquisition\" OR hiring OR \"job opportunity\" OR interview OR \"career opportunity\" OR \"role at\" OR \"engineering role\")",
+    "query": "is:unread -from:linkedin -from:linkedin.com -from:dice.com -from:ziprecruiter.com -from:indeed.com -from:monster.com -from:greatrecruiters.com (recruiter OR \"talent acquisition\" OR hiring OR \"job opportunity\" OR \"career opportunity\" OR \"role at\" OR \"engineering role\")",
+    "ignore_interview_invites": true,
     "ignore_senders": [
       "linkedin",
       "linkedin.com",

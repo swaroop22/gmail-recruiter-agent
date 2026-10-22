@@ -307,6 +307,109 @@ def is_automated_or_bot(from_header: str, subject_header: str, ignored_senders: 
     return False
 
 
+def is_interview_invite(subject_header: str, snippet: str = "", from_header: str = "") -> bool:
+    """
+    Checks whether the incoming message is an interview invitation, scheduling request,
+    or coding assessment, preventing the agent from sending generic recruiter pitches
+    to active interview stages.
+    """
+    text_subject = subject_header.lower()
+    text_snippet = snippet.lower()
+    text_combined = f"{text_subject} {text_snippet}"
+    from_lower = from_header.lower()
+
+    # Known interview scheduling & assessment platforms
+    scheduling_domains = [
+        "calendly.com", "goodtime.io", "hirevue.com", "greenhouse-mail.io",
+        "lever.co", "hackerrank.com", "codility.com", "codesignal.com",
+        "workablemail.com", "myworkday.com", "smartrecruiters.com"
+    ]
+    if any(domain in from_lower for domain in scheduling_domains):
+        return True
+
+    if any(prefix in from_lower for prefix in ["scheduling@", "interviews@", "interview@"]):
+        return True
+
+    # Subject indicators for interview invites & assessments
+    subject_interview_signals = [
+        "interview invite",
+        "interview invitation",
+        "invitation to interview",
+        "invited to interview",
+        "schedule your interview",
+        "scheduling your interview",
+        "scheduling an interview",
+        "interview schedule",
+        "interview scheduled",
+        "interview confirmation",
+        "interview details",
+        "interview next steps",
+        "interview availability",
+        "interview request",
+        "interview time",
+        "interview slot",
+        "interview with",
+        "interview for",
+        "interview on",
+        "phone interview",
+        "technical interview",
+        "video interview",
+        "final interview",
+        "round 1 interview",
+        "round 2 interview",
+        "coding assessment",
+        "technical assessment",
+        "coding challenge",
+        "hackerrank",
+        "codility",
+        "codesignal"
+    ]
+    for signal in subject_interview_signals:
+        if signal in text_subject:
+            return True
+
+    # General pattern: mentions interview and scheduling/invitation words
+    if re.search(r"\binterview\b", text_subject):
+        interview_context = [
+            "invite", "invitation", "schedule", "scheduled", "confirm", "confirmation",
+            "with", "for", "details", "request", "round", "stage", "next steps",
+            "prep", "zoom", "teams", "google meet", "call"
+        ]
+        if any(w in text_subject for w in interview_context):
+            return True
+
+    # Calendar or meeting invites involving interview
+    if any(k in text_subject for k in ["invitation:", "calendar invite", "meeting invite", "invite:"]) and "interview" in text_combined:
+        return True
+
+    # Snippet / body signals
+    snippet_signals = [
+        "invite you to an interview",
+        "invite you to interview",
+        "invited to interview",
+        "invited for an interview",
+        "like to schedule an interview",
+        "like to invite you for an interview",
+        "schedule a phone interview",
+        "schedule a technical interview",
+        "schedule your interview",
+        "scheduling your interview",
+        "select a time for your interview",
+        "choose a time for your interview",
+        "interview has been scheduled",
+        "interview is confirmed",
+        "confirmation for your upcoming interview",
+        "book a time on my calendar for our interview",
+        "take the coding assessment",
+        "complete the coding challenge"
+    ]
+    for signal in snippet_signals:
+        if signal in text_snippet:
+            return True
+
+    return False
+
+
 def build_reply_email(
     to_email: str,
     subject: str,
@@ -461,6 +564,20 @@ def process_account_inbox(account: Dict[str, str], config: Dict[str, Any], state
                 logger.info(f"🤖 [{account_name}] Ignored bot/alert message: '{subject_header}' from '{from_header}'")
                 state["processed_message_ids"][msg_id] = {
                     "action": "ignored_bot",
+                    "from": from_header,
+                    "subject": subject_header,
+                    "timestamp": time.time()
+                }
+                save_state(state_file, state)
+                continue
+
+            # Skip interview invitations, scheduling emails, and coding assessments
+            ignore_interview_invites = config.get("search", {}).get("ignore_interview_invites", True)
+            snippet = full_msg.get("snippet", "")
+            if ignore_interview_invites and is_interview_invite(subject_header, snippet=snippet, from_header=from_header):
+                logger.info(f"🗓️ [{account_name}] Skipping interview invite/assessment: '{subject_header}' from '{from_header}'")
+                state["processed_message_ids"][msg_id] = {
+                    "action": "ignored_interview_invite",
                     "from": from_header,
                     "subject": subject_header,
                     "timestamp": time.time()
