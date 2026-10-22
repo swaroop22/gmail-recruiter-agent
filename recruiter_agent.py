@@ -263,13 +263,14 @@ def is_automated_or_bot(from_header: str, subject_header: str, ignored_senders: 
     from_lower = from_header.lower()
     subject_lower = subject_header.lower()
 
-    # Disallow all LinkedIn, Dice, ZipRecruiter, Indeed, and Monster job board/alert emails
+    # Disallow all LinkedIn, Dice, ZipRecruiter, Indeed, Monster, and GreatRecruiters job board/alert emails
     job_board_patterns = [
         "linkedin", "via linkedin",
         "dice", "dice.com",
         "ziprecruiter", "zip recruiter",
         "indeed", "indeedmail", "indeedapply",
-        "monster", "monster.com"
+        "monster", "monster.com",
+        "greatrecruiters", "greatrecruiters.com"
     ]
     for board in job_board_patterns:
         if board in from_lower:

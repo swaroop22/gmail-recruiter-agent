@@ -49,6 +49,7 @@ class TestRecruiterAgent(unittest.TestCase):
         self.assertTrue(is_automated_or_bot("alert@indeed.com", "Java developer opening", []))
         self.assertTrue(is_automated_or_bot("monster@notifications.monster.com", "Job alert for Java", []))
         self.assertTrue(is_automated_or_bot("recruiter@agency.com", "ZipRecruiter application notice", []))
+        self.assertTrue(is_automated_or_bot("support@greatrecruiters.com", "Review your recent recruiter experience", []))
         self.assertTrue(is_automated_or_bot("no-reply@glassdoor.com", "Job alert", ignored))
         self.assertTrue(is_automated_or_bot("system@company.com", "Weekly Digest of Opportunities", ignored))
 
